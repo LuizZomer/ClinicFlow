@@ -1,2 +1,2 @@
-# Propeller-clock(Relógio-de-hélice)
+# Propeller clock(Relógio de hélice)
  
