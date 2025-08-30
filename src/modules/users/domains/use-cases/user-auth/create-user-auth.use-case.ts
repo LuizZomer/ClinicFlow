@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UsersAuthInterface } from '../../infra/gateways/users-auth.interface';
+import { UsersAuthInterface } from '../../../infra/gateway/user-auth/users-auth.interface';
 import { UserAuth } from 'src/core/entities/user-auth.entity';
 
 @Injectable()

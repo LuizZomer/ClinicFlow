@@ -1,4 +1,4 @@
-import { ProfessionalCertificateType } from 'src/shared/types/professionalCertificateTypes.enum';
+import { ProfessionalCertificateType } from 'src/shared/types/enum/professionalCertificateTypes.enum';
 import {
   Column,
   Entity,

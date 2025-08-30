@@ -1,7 +1,14 @@
-import { Roles } from 'src/shared/types/roles.enum';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Roles } from 'src/shared/types/enum/roles.enum';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ProfessionalAttributes } from './professional-attributes.entity';
 import { UserAuth } from './user-auth.entity';
+import { Appointment } from './appointment.entity';
 
 @Entity('users')
 export class User {
@@ -28,4 +35,10 @@ export class User {
     (professionalAttributes) => professionalAttributes.user,
   )
   professionalAttributes: ProfessionalAttributes;
+
+  @OneToMany(() => Appointment, (appointment) => appointment.patient)
+  appointmentsAsPatient: Appointment[];
+
+  @OneToMany(() => Appointment, (appointment) => appointment.professional)
+  appointmentsAsProfessional: Appointment[];
 }

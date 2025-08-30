@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/core/entities/user.entity';
-import { FindUserAuthByUseCase } from 'src/modules/users-auth/domain/use-cases/find-user-auth-by.use-case';
-import { FindOneByUseCase } from 'src/modules/users/domains/use-cases/find-one-by-id.use-case';
+import { FindUserAuthByUseCase } from 'src/modules/users/domains/use-cases/user-auth/find-user-auth-by.use-case';
+import { FindUserOneByUseCase } from 'src/modules/users/domains/use-cases/user/find-one-by-id.use-case';
 import { HashUtil } from 'src/shared/utils/Hash.util';
 
 @Injectable()
 export class JwtAuthUseCase {
   constructor(
     private jwtService: JwtService,
-    private findOneUserByIdUseCase: FindOneByUseCase,
+    private findOneUserByIdUseCase: FindUserOneByUseCase,
     private findUserAuthByUseCase: FindUserAuthByUseCase,
   ) {}
 
-  async validateUser(document: string, pass: string): Promise<any> {
+  async validateUser(document: string, pass: string): Promise<User | null> {
     const user = await this.findOneUserByIdUseCase.execute({ document });
 
     if (!user) return null;
@@ -24,11 +24,13 @@ export class JwtAuthUseCase {
     const isPasswordValid = await HashUtil.compare(pass, userAuth.passwordHash);
     if (!isPasswordValid) return null;
 
+    console.log('userJWT', user);
+
     return user;
   }
 
   login(user: User) {
-    const payload = { document: user.document, sub: user.id };
+    const payload = { name: user.name, sub: user.id, role: user.role };
     return {
       access_token: this.jwtService.sign(payload),
     };

@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { RegisterUseCase } from '../../domains/use-cases/register.use-case';
+import { RegisterUseCase } from '../../domains/use-cases/user/register.use-case';
 import { RegisterDto } from '../dto/register.dto';
 
 @Controller('users')

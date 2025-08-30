@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from '../users/users.module';
-import { UsersAuthModule } from '../users-auth/users-auth.module';
 import { LocalAuthUseCase } from './domain/use-cases/local-auth.use-case';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtAuthUseCase } from './domain/use-cases/jwt-auth.use-case';
@@ -14,7 +13,6 @@ import { PassportModule } from '@nestjs/passport';
   imports: [
     UsersModule,
     PassportModule,
-    UsersAuthModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
