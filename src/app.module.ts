@@ -4,6 +4,7 @@ import * as path from 'path';
 import { DatabaseModule } from './config/database/databse.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { AppointmentsModule } from './modules/appointments/appointments.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from './modules/auth/auth.module';
     DatabaseModule,
     UsersModule,
     AuthModule,
+    AppointmentsModule,
   ],
 })
 export class AppModule {}

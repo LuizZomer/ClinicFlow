@@ -44,4 +44,10 @@ export class Appointment {
 
   @RelationId((appointment: Appointment) => appointment.professional)
   professionalId: number;
+
+  constructor(partial?: Partial<Appointment>) {
+    if (partial) {
+      Object.assign(this, partial);
+    }
+  }
 }

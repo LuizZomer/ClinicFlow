@@ -4,8 +4,8 @@ import { User } from 'src/core/entities/user.entity';
 import { UserAuth } from 'src/core/entities/user-auth.entity';
 import { CreateUserAuthUseCase } from 'src/modules/users/domains/use-cases/user-auth/create-user-auth.use-case';
 import { HashUtil } from 'src/shared/utils/Hash.util';
-import { RegisterDto } from '../../../presentation/dto/register.dto';
 import { UsersGatewayInterface } from 'src/modules/users/infra/gateway/user/users-gateway.interface';
+import { RegisterDto } from 'src/modules/users/presentation/dto/input/register.dto';
 
 @Injectable()
 export class RegisterUseCase {
