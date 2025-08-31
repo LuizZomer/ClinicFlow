@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UsersAuthInterface } from '../../../infra/gateway/user-auth/users-auth.interface';
+import { UsersAuthGatewayInterface } from '../../../infra/gateway/user-auth/users-auth.interface';
 import { UserAuth } from 'src/core/entities/user-auth.entity';
 
 @Injectable()
 export class CreateUserAuthUseCase {
   constructor(
-    @Inject('UsersAuthInterface')
-    private readonly usersAuthGateway: UsersAuthInterface,
+    @Inject('UsersAuthGatewayInterface')
+    private readonly usersAuthGateway: UsersAuthGatewayInterface,
   ) {}
 
   async execute(userAuth: Partial<UserAuth>): Promise<UserAuth> {

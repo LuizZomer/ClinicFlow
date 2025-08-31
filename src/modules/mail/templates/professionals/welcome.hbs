@@ -1,0 +1,73 @@
+<html lang='pt-BR'>
+  <head>
+    <meta charset='UTF-8' />
+    <title>Bem-vindo à Plataforma de Consultas</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f9fc;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+      .container {
+        max-width: 600px;
+        margin: 30px auto;
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+      }
+      h1 {
+        color: #2c7be5;
+      }
+      .highlight {
+        font-weight: bold;
+        color: #111;
+      }
+      .footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #888;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='container'>
+      <h1>Bem-vindo(a), {{name}}!</h1>
+
+      <p>
+        É um prazer tê-lo(a) em nossa plataforma de
+        <strong>marcação de consultas</strong>. Agora você poderá gerenciar seus
+        atendimentos de forma simples e eficiente.
+      </p>
+
+      <p>
+        ✅
+        <span class='highlight'>Login:</span>
+        {{document}}
+        <br />
+        🔑
+        <span class='highlight'>Senha:</span>
+        {{password}}
+      </p>
+
+      <p>
+        Para começar, acesse sua conta na plataforma e sugerimos que você troque
+        sua senha padrão para uma senha mais segura.
+      </p>
+
+      <p>
+        Estamos felizes em tê-lo(a) conosco e desejamos muito sucesso nos seus
+        atendimentos!
+      </p>
+
+      <div class='footer'>
+        ©
+        {{year}}
+        ClinicFlow - Todos os direitos reservados
+      </div>
+    </div>
+  </body>
+</html>

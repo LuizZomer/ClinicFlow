@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserAuth } from 'src/core/entities/user-auth.entity';
 import { Repository } from 'typeorm';
-import { UsersAuthInterface } from './users-auth.interface';
+import { UsersAuthGatewayInterface } from './users-auth.interface';
 
 @Injectable()
-export class UsersAuthGatewayTypeorm implements UsersAuthInterface {
+export class UsersAuthGatewayTypeorm implements UsersAuthGatewayInterface {
   constructor(
     @InjectRepository(UserAuth)
     private readonly userRepository: Repository<UserAuth>,

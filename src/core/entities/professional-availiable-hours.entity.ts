@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ProfessionalAttributes } from './professional-attributes.entity';
+import { DayOfWeek } from 'src/shared/types/enum/day-of-week.enum';
 
 @Entity('professional_availiable_hours')
 export class ProfessionalAvailiableHours {
@@ -16,10 +17,10 @@ export class ProfessionalAvailiableHours {
   @Column({ name: 'professional_id', type: 'integer' })
   professionalId: number;
 
-  @Column({ name: 'day', type: 'integer' })
-  day: number;
+  @Column({ name: 'day', type: 'enum', enum: DayOfWeek })
+  dayOfWeek: DayOfWeek;
 
-  @Column({ name: 'hour', type: 'integer' })
+  @Column({ name: 'hour', type: 'time' })
   hour: number;
 
   @Column({
