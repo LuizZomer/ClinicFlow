@@ -4,7 +4,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ProfessionalAvailiableHours } from 'src/core/entities/professional-availiable-hours.entity';
 import { ProfessionalAvailiableHoursGatewayInterface } from 'src/modules/users/infra/gateway/professional-availiable-hours/professional-availiable-hours.interface';
 import { UsersGatewayInterface } from 'src/modules/users/infra/gateway/user/users-gateway.interface';
 import { UpdateAvailabilityDto } from 'src/modules/users/presentation/dto/input/update-professional-availability.dto';
@@ -20,40 +19,28 @@ export class CreateProfessionalAvailiableUseCase {
     private readonly usersGateway: UsersGatewayInterface,
     private readonly dataSource: DataSource,
   ) {}
-
   async execute(professionalId: number, data: UpdateAvailabilityDto) {
+    const professional = await this.findProfessionalById(professionalId);
+    this.verifyUserRole(professional.role);
+
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
-    const professional = await this.findProfessionalById(professionalId);
-    this.verifyUserRole(professional.role);
-
     try {
-      // 1. Apaga os horários antigos do profissional
-      await queryRunner.manager.delete(ProfessionalAvailiableHours, {
+      await this.professionalAvailiableHoursGateway.deleteByProfessionalId(
         professionalId,
-      });
+      );
 
-      // 2. Cria as novas entidades de disponibilidade
-      const newAvailability = data.availability.map((a) =>
-        queryRunner.manager.create(ProfessionalAvailiableHours, {
+      const newAvailability =
+        await this.professionalAvailiableHoursGateway.createAvailability(
           professionalId,
-          dayOfWeek: a.dayOfWeek,
-          hour: a.hour,
-        }),
-      );
+          data.availability,
+        );
 
-      // 3. Salva no banco
-      await queryRunner.manager.save(
-        ProfessionalAvailiableHours,
-        newAvailability,
-      );
-
-      // 4. Commit
       await queryRunner.commitTransaction();
 
-      return { success: true, availability: newAvailability };
+      return newAvailability;
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw err;
