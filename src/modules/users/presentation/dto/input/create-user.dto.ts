@@ -13,8 +13,4 @@ export class CreateUserDto {
   @ApiProperty({ example: 'john.doe@example.com' })
   @IsString({ message: 'Email deve ser uma string' })
   email: string;
-
-  @ApiProperty({ example: 'password' })
-  @IsString({ message: 'Senha deve ser uma string' })
-  password: string;
 }

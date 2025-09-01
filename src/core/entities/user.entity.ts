@@ -24,7 +24,7 @@ export class User {
   @Column({ name: 'email', type: 'varchar', length: 255, unique: true })
   email: string;
 
-  @Column({ name: 'role', enum: Roles, default: Roles.USER })
+  @Column({ name: 'role', enum: Roles, default: Roles.PATIENT })
   role: Roles;
 
   @OneToOne(() => UserAuth, (userAuth) => userAuth.user)

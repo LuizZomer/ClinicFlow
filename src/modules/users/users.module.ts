@@ -17,6 +17,7 @@ import { UsersGatewayTypeorm } from './infra/gateway/user/users-gateway.typeorm'
 import { OperatorController } from './presentation/controllers/operator.controller';
 import { ProfessionalController } from './presentation/controllers/professional.controller';
 import { MailModule } from '../mail/mail.module';
+import { PatientController } from './presentation/controllers/patient.controller';
 
 const GatewayProviders = [
   {
@@ -56,7 +57,7 @@ const UseCaseProviders = [
     ]),
     MailModule,
   ],
-  controllers: [OperatorController, ProfessionalController],
+  controllers: [OperatorController, ProfessionalController, PatientController],
   providers: [...GatewayProviders, ...UseCaseProviders],
   exports: [...GatewayProviders, ...UseCaseProviders],
 })

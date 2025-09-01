@@ -8,7 +8,7 @@ import { User } from 'src/core/entities/user.entity';
 import { UsersAuthGatewayInterface } from 'src/modules/users/infra/gateway/user-auth/users-auth.interface';
 import { generatePassword } from 'src/shared/utils/generateInitialPassword';
 import { HashUtil } from 'src/shared/utils/Hash.util';
-import { WelcomePlatformUseCase } from 'src/modules/mail/domains/professionals/welcome-platoform.use-case';
+import { WelcomePlatformUseCase } from 'src/modules/mail/domains/user/welcome-platform.use-case';
 
 @Injectable()
 export class CreateProfessionalUseCase {

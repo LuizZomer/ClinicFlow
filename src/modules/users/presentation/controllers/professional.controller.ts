@@ -3,7 +3,9 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -19,11 +21,14 @@ import { GlobalErrorInterface } from 'src/shared/types/interface/errors/global-e
 import { CreateProfessionalUseCase } from '../../domains/use-cases/professional/create-professional.use-case';
 import { CreateProfessionalDto } from '../dto/input/create-professional.dto';
 import { RegisterResponseDto } from '../dto/output/register-response.dto';
+import { UpdateAvailabilityDto } from '../dto/input/update-professional-availability.dto';
+import { CreateProfessionalAvailiableUseCase } from '../../domains/use-cases/professional/create-professional-availiable.use-case';
 
 @Controller('professional')
 export class ProfessionalController {
   constructor(
     private readonly createProfessionalUseCase: CreateProfessionalUseCase,
+    private readonly createProfessionalAvailiableUseCase: CreateProfessionalAvailiableUseCase,
   ) {}
 
   @Post()
@@ -44,6 +49,34 @@ export class ProfessionalController {
     return {
       content: userCreated,
       status: HttpStatus.CREATED,
+    };
+  }
+
+  @Put(':id/availability')
+  @RolesAllowed(Roles.OPERATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Update professional availability' })
+  // @ApiCreatedResponse({
+  //   description: 'Professional availability updated',
+  //   type: RegisterResponseDto,
+  // })
+  // @ApiBadRequestResponse({
+  //   description: 'User already exists',
+  //   type: GlobalErrorInterface,
+  // })
+  async updateProfessionalAvailability(
+    @Body() availability: UpdateAvailabilityDto,
+    @Param('id') professionalId: string,
+  ) {
+    const userCreated = await this.createProfessionalAvailiableUseCase.execute(
+      Number(professionalId),
+      availability,
+    );
+
+    return {
+      content: userCreated,
+      status: HttpStatus.OK,
     };
   }
 }

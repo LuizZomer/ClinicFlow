@@ -2,14 +2,14 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { SendEmailProfessionalNodemailer } from './infra/gateways/professionals/send-email-professional.nodemailer';
-import { WelcomePlatformUseCase } from './domains/professionals/welcome-platoform.use-case';
+import { SendEmailUserNodemailer } from './infra/gateways/user/send-email-user.nodemailer';
+import { WelcomePlatformUseCase } from './domains/user/welcome-platform.use-case';
 import { join } from 'path';
 
 const GatewayProviders = [
   {
-    provide: 'SendEmailProfessionalInterface',
-    useClass: SendEmailProfessionalNodemailer,
+    provide: 'SendEmailUserInterface',
+    useClass: SendEmailUserNodemailer,
   },
 ];
 

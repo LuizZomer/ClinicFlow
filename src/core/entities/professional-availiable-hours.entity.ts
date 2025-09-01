@@ -21,7 +21,7 @@ export class ProfessionalAvailiableHours {
   dayOfWeek: DayOfWeek;
 
   @Column({ name: 'hour', type: 'time' })
-  hour: number;
+  hour: string;
 
   @Column({
     name: 'created_at',
