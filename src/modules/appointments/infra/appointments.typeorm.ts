@@ -10,10 +10,30 @@ export class AppointmentsGatewayTypeorm
 {
   constructor(
     @InjectRepository(Appointment)
-    private readonly repository: Repository<Appointment>,
+    private readonly appointmentRepository: Repository<Appointment>,
   ) {}
 
   async create(appointment: Appointment): Promise<Appointment> {
-    return this.repository.save(appointment);
+    return this.appointmentRepository.save(appointment);
+  }
+
+  async getByProfessionalOrPatientIdAndTime(
+    professionalId: number,
+    patientId: number,
+    scheduledAt: Date,
+  ): Promise<Appointment | null> {
+    const appointment = this.appointmentRepository
+      .createQueryBuilder('appointment')
+      .where(
+        '(appointment.professionalId = :professionalId OR appointment.patientId = :patientId)',
+        {
+          professionalId,
+          patientId,
+        },
+      )
+      .andWhere('appointment.scheduledAt = :scheduledAt', { scheduledAt })
+      .getOne();
+
+    return appointment;
   }
 }

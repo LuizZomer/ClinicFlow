@@ -1,11 +1,10 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
-  RelationId,
 } from 'typeorm';
 import { User } from './user.entity';
 
@@ -16,6 +15,12 @@ export class Appointment {
 
   @Column({ name: 'scheduled_at', type: 'timestamp' })
   scheduledAt: Date;
+
+  @Column({ name: 'professional_id', type: 'integer' })
+  professionalId: number;
+
+  @Column({ name: 'patient_id', type: 'integer' })
+  patientId: number;
 
   @Column({
     name: 'created_at',
@@ -33,17 +38,11 @@ export class Appointment {
   @JoinColumn({ name: 'patient_id' })
   patient: User;
 
-  @RelationId((appointment: Appointment) => appointment.patient)
-  patientId: number;
-
   @ManyToOne(() => User, (user) => user.appointmentsAsProfessional, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'professional_id' })
   professional: User;
-
-  @RelationId((appointment: Appointment) => appointment.professional)
-  professionalId: number;
 
   constructor(partial?: Partial<Appointment>) {
     if (partial) {
