@@ -4,8 +4,13 @@ import { ProfessionalAvailiableHours } from 'src/core/entities/professional-avai
 import { FindOneByWithAvailiableHoursUseCase } from 'src/modules/users/domains/use-cases/professional/find-one-by-with-availiable-hours.use-case';
 import { FindUserOneByUseCase } from 'src/modules/users/domains/use-cases/user/find-one-by-id.use-case';
 import { DayOfWeek } from 'src/shared/types/enum/day-of-week.enum';
-import { AppointmentsGatewayInterface } from '../../infra/appointments.interface';
 import { CreateAppointmentDto } from '../../presentation/dto/input/create-appointment.dto';
+import { ProfessionalAppointmentUseCase } from 'src/modules/mail/domains/appointment/professional-appointment.use-case';
+import { PatientAppointmentUseCase } from 'src/modules/mail/domains/appointment/patient-appointment.use-case';
+import { formatInTZ } from 'src/shared/utils/formatDate';
+import { AppointmentsGatewayInterface } from '../../infra/appointment/appointments.interface';
+import { AppointmentStatus } from 'src/shared/types/enum/appointment-status.enum';
+import { User } from 'src/core/entities/user.entity';
 
 @Injectable()
 export class CreateAppointmentUseCase {
@@ -14,6 +19,8 @@ export class CreateAppointmentUseCase {
     private readonly appointmentsGateway: AppointmentsGatewayInterface,
     private readonly findOneByWithAvailiableHoursUseCase: FindOneByWithAvailiableHoursUseCase,
     private readonly findUserOneByUseCase: FindUserOneByUseCase,
+    private readonly patientAppointmentUseCase: PatientAppointmentUseCase,
+    private readonly professionalAppointmentUseCase: ProfessionalAppointmentUseCase,
   ) {}
 
   async execute(dto: CreateAppointmentDto) {
@@ -60,9 +67,15 @@ export class CreateAppointmentUseCase {
       scheduledAt: dto.scheduledAt,
       patient: patient,
       professional: professional,
+      statusId: AppointmentStatus.ACCEPTED,
     });
 
-    return this.appointmentsGateway.create(appointment);
+    const createdAppointment =
+      await this.appointmentsGateway.create(appointment);
+
+    await this.sendEmailAppointment(appointment);
+
+    return this.outputMapper(createdAppointment, patient, professional);
   }
 
   private validatePastDate(scheduledAt: Date) {
@@ -115,5 +128,49 @@ export class CreateAppointmentUseCase {
     }
 
     return appointment;
+  }
+
+  private async sendEmailAppointment(appointment: Appointment) {
+    await this.patientAppointmentUseCase.execute({
+      patientName: appointment.patient?.name,
+      professionalName: appointment.professional?.name,
+      scheduledAt: formatInTZ(
+        new Date(appointment.scheduledAt),
+        'America/Sao_Paulo',
+      ),
+      patientEmail: appointment.patient?.email,
+    });
+
+    await this.professionalAppointmentUseCase.execute({
+      patientName: appointment.patient?.name,
+      professionalName: appointment.professional?.name,
+      scheduledAt: formatInTZ(
+        new Date(appointment.scheduledAt),
+        'America/Sao_Paulo',
+      ),
+      professionalEmail: appointment.professional?.email,
+    });
+  }
+
+  private outputMapper(
+    appointment: Appointment,
+    patient: User,
+    professional: User,
+  ) {
+    return {
+      id: appointment.id,
+      scheduledAt: appointment.scheduledAt,
+      patient: {
+        id: patient.id,
+        name: patient.name,
+        email: patient.email,
+      },
+      professional: {
+        id: professional.id,
+        name: professional.name,
+        email: professional.email,
+      },
+      status: appointment.status,
+    };
   }
 }

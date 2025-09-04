@@ -3,6 +3,8 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -19,11 +21,13 @@ import { GlobalErrorInterface } from 'src/shared/types/interface/errors/global-e
 import { CreateAppointmentUseCase } from '../../domains/use-cases/create-appointment.use-case';
 import { CreateAppointmentDto } from '../dto/input/create-appointment.dto';
 import { AppointmentResponseDto } from '../dto/output/appointment-response.dto';
+import { CancelAppointmentUseCase } from '../../domains/use-cases/cancel-appointment.use-case';
 
 @Controller('appointments')
 export class AppointmentController {
   constructor(
     private readonly createAppointmentUseCase: CreateAppointmentUseCase,
+    private readonly cancelAppointmentUseCase: CancelAppointmentUseCase,
   ) {}
 
   @Post()
@@ -40,6 +44,33 @@ export class AppointmentController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() appointment: CreateAppointmentDto) {
-    return this.createAppointmentUseCase.execute(appointment);
+    const appointmentCreated =
+      await this.createAppointmentUseCase.execute(appointment);
+
+    return {
+      statusCode: HttpStatus.CREATED,
+      content: appointmentCreated,
+    };
+  }
+
+  @Patch(':id')
+  // @ApiOperation({ summary: 'Cancel an appointment' })
+  // @ApiCreatedResponse({
+  //   description: 'Appointment canceled',
+  //   type: AppointmentResponseDto,
+  // })
+  // @ApiUnauthorizedResponse({
+  //   description: 'Unauthorized',
+  //   type: GlobalErrorInterface,
+  // })
+  @RolesAllowed(Roles.OPERATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @HttpCode(HttpStatus.CREATED)
+  async cancel(@Param('id') id: number) {
+    await this.cancelAppointmentUseCase.execute(id);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Agendamento cancelado com sucesso!',
+    };
   }
 }

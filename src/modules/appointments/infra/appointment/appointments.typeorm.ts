@@ -36,4 +36,12 @@ export class AppointmentsGatewayTypeorm
 
     return appointment;
   }
+
+  async update(appointment: Appointment): Promise<Appointment> {
+    return this.appointmentRepository.save(appointment);
+  }
+
+  async getOneBy(where: Partial<Appointment>): Promise<Appointment | null> {
+    return this.appointmentRepository.findOneBy(where);
+  }
 }

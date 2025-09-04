@@ -5,15 +5,26 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { SendEmailUserNodemailer } from './infra/gateways/user/send-email-user.nodemailer';
 import { WelcomePlatformUseCase } from './domains/user/welcome-platform.use-case';
 import { join } from 'path';
+import { SendEmailAppointmentNodemailer } from './infra/gateways/appointment/send-email-appointment.nodemailer';
+import { ProfessionalAppointmentUseCase } from './domains/appointment/professional-appointment.use-case';
+import { PatientAppointmentUseCase } from './domains/appointment/patient-appointment.use-case';
 
 const GatewayProviders = [
   {
     provide: 'SendEmailUserInterface',
     useClass: SendEmailUserNodemailer,
   },
+  {
+    provide: 'SendEmailAppointmentInterface',
+    useClass: SendEmailAppointmentNodemailer,
+  },
 ];
 
-const UseCaseProviders = [WelcomePlatformUseCase];
+const UseCaseProviders = [
+  WelcomePlatformUseCase,
+  ProfessionalAppointmentUseCase,
+  PatientAppointmentUseCase,
+];
 
 @Module({
   imports: [
