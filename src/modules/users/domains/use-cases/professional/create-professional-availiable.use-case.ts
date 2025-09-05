@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { ProfessionalAvailiableHoursGatewayInterface } from 'src/modules/users/infra/gateway/professional-availiable-hours/professional-availiable-hours.interface';
 import { UsersGatewayInterface } from 'src/modules/users/infra/gateway/user/users-gateway.interface';
-import { UpdateAvailabilityDto } from 'src/modules/users/presentation/dto/input/update-professional-availability.dto';
+import { UpdateAvailabilityDto } from 'src/modules/users/presentation/dto/input/professional/update-professional-availability.dto';
 import { Roles } from 'src/shared/types/enum/roles.enum';
 import { DataSource } from 'typeorm';
 

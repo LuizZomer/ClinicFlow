@@ -1,11 +1,13 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -19,16 +21,19 @@ import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { Roles } from 'src/shared/types/enum/roles.enum';
 import { GlobalErrorInterface } from 'src/shared/types/interface/errors/global-error.interface';
 import { CreateProfessionalUseCase } from '../../domains/use-cases/professional/create-professional.use-case';
-import { CreateProfessionalDto } from '../dto/input/create-professional.dto';
+import { CreateProfessionalDto } from '../dto/input/professional/create-professional.dto';
 import { RegisterResponseDto } from '../dto/output/register-response.dto';
-import { UpdateAvailabilityDto } from '../dto/input/update-professional-availability.dto';
+import { UpdateAvailabilityDto } from '../dto/input/professional/update-professional-availability.dto';
 import { CreateProfessionalAvailiableUseCase } from '../../domains/use-cases/professional/create-professional-availiable.use-case';
+import { FindAllByUseCaseDto } from '../dto/input/professional/find-all-by.use-case';
+import { FindAllProfessionalByUseCase } from '../../domains/use-cases/professional/find-all-by.use-case';
 
 @Controller('professional')
 export class ProfessionalController {
   constructor(
     private readonly createProfessionalUseCase: CreateProfessionalUseCase,
     private readonly createProfessionalAvailiableUseCase: CreateProfessionalAvailiableUseCase,
+    private readonly findAllProfessionalByUseCase: FindAllProfessionalByUseCase,
   ) {}
 
   @Post()
@@ -76,6 +81,29 @@ export class ProfessionalController {
 
     return {
       content: userCreated,
+      status: HttpStatus.OK,
+    };
+  }
+
+  @Get()
+  @RolesAllowed(Roles.OPERATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get all professionals' })
+  // @ApiCreatedResponse({
+  //   description: 'Professional availability updated',
+  //   type: RegisterResponseDto,
+  // })
+  // @ApiBadRequestResponse({
+  //   description: 'User already exists',
+  //   type: GlobalErrorInterface,
+  // })
+  async findAllProfessional(@Query() query: FindAllByUseCaseDto) {
+    const professionals =
+      await this.findAllProfessionalByUseCase.execute(query);
+
+    return {
+      content: professionals,
       status: HttpStatus.OK,
     };
   }

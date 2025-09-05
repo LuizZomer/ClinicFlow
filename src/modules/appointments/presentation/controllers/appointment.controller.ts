@@ -1,11 +1,13 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -22,12 +24,15 @@ import { CreateAppointmentUseCase } from '../../domains/use-cases/create-appoint
 import { CreateAppointmentDto } from '../dto/input/create-appointment.dto';
 import { AppointmentResponseDto } from '../dto/output/appointment-response.dto';
 import { CancelAppointmentUseCase } from '../../domains/use-cases/cancel-appointment.use-case';
+import { FindAllByUseCase } from '../../domains/use-cases/find-all-by.use-case';
+import { Appointment } from 'src/core/entities/appointment.entity';
 
 @Controller('appointments')
 export class AppointmentController {
   constructor(
     private readonly createAppointmentUseCase: CreateAppointmentUseCase,
     private readonly cancelAppointmentUseCase: CancelAppointmentUseCase,
+    private readonly findAllByUseCase: FindAllByUseCase,
   ) {}
 
   @Post()
@@ -71,6 +76,17 @@ export class AppointmentController {
     return {
       statusCode: HttpStatus.OK,
       message: 'Agendamento cancelado com sucesso!',
+    };
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async findAll(@Query() query: Partial<Appointment>) {
+    const appointments = await this.findAllByUseCase.execute(query);
+    return {
+      statusCode: HttpStatus.OK,
+      content: appointments,
     };
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ProfessionalAttributesGatewayInterface } from 'src/modules/users/infra/gateway/professional-attributes/professional-attributes.interface';
 import { Inject } from '@nestjs/common';
 import { UsersGatewayInterface } from 'src/modules/users/infra/gateway/user/users-gateway.interface';
-import { CreateProfessionalDto } from 'src/modules/users/presentation/dto/input/create-professional.dto';
+import { CreateProfessionalDto } from 'src/modules/users/presentation/dto/input/professional/create-professional.dto';
 import { ProfessionalAttributes } from 'src/core/entities/professional-attributes.entity';
 import { User } from 'src/core/entities/user.entity';
 import { UsersAuthGatewayInterface } from 'src/modules/users/infra/gateway/user-auth/users-auth.interface';

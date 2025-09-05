@@ -44,4 +44,8 @@ export class AppointmentsGatewayTypeorm
   async getOneBy(where: Partial<Appointment>): Promise<Appointment | null> {
     return this.appointmentRepository.findOneBy(where);
   }
+
+  async getAllBy(where: Partial<Appointment>): Promise<Appointment[]> {
+    return this.appointmentRepository.find({ where });
+  }
 }

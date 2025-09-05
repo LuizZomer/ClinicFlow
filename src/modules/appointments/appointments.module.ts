@@ -7,6 +7,7 @@ import { CreateAppointmentUseCase } from './domains/use-cases/create-appointment
 import { UsersModule } from '../users/users.module';
 import { MailModule } from '../mail/mail.module';
 import { CancelAppointmentUseCase } from './domains/use-cases/cancel-appointment.use-case';
+import { FindAllByUseCase } from './domains/use-cases/find-all-by.use-case';
 
 const gatewaysProviders = [
   {
@@ -15,7 +16,11 @@ const gatewaysProviders = [
   },
 ];
 
-const useCaseProviders = [CreateAppointmentUseCase, CancelAppointmentUseCase];
+const useCaseProviders = [
+  CreateAppointmentUseCase,
+  CancelAppointmentUseCase,
+  FindAllByUseCase,
+];
 
 @Module({
   imports: [TypeOrmModule.forFeature([Appointment]), UsersModule, MailModule],

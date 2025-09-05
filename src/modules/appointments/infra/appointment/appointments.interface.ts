@@ -9,4 +9,5 @@ export interface AppointmentsGatewayInterface {
     scheduledAt: Date,
   ): Promise<Appointment | null>;
   getOneBy(where: Partial<Appointment>): Promise<Appointment | null>;
+  getAllBy(where: Partial<Appointment>): Promise<Appointment[]>;
 }

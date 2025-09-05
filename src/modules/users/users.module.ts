@@ -20,6 +20,7 @@ import { MailModule } from '../mail/mail.module';
 import { PatientController } from './presentation/controllers/patient.controller';
 import { ProfessionalsGatewayTypeorm } from './infra/gateway/user/professional/professionals-gateway.typeorm';
 import { FindOneByWithAvailiableHoursUseCase } from './domains/use-cases/professional/find-one-by-with-availiable-hours.use-case';
+import { FindAllProfessionalByUseCase } from './domains/use-cases/professional/find-all-by.use-case';
 
 const GatewayProviders = [
   {
@@ -52,6 +53,7 @@ const UseCaseProviders = [
   CreateProfessionalUseCase,
   CreateProfessionalAvailiableUseCase,
   FindOneByWithAvailiableHoursUseCase,
+  FindAllProfessionalByUseCase,
 ];
 
 @Module({
