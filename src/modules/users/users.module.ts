@@ -21,6 +21,7 @@ import { PatientController } from './presentation/controllers/patient.controller
 import { ProfessionalsGatewayTypeorm } from './infra/gateway/user/professional/professionals-gateway.typeorm';
 import { FindOneByWithAvailiableHoursUseCase } from './domains/use-cases/professional/find-one-by-with-availiable-hours.use-case';
 import { FindAllProfessionalByUseCase } from './domains/use-cases/professional/find-all-by.use-case';
+import { FindAllByScheduledAtForSelectUseCase } from './domains/use-cases/professional/find-all-by-scheduled-at-for-select.use-case';
 
 const GatewayProviders = [
   {
@@ -54,6 +55,7 @@ const UseCaseProviders = [
   CreateProfessionalAvailiableUseCase,
   FindOneByWithAvailiableHoursUseCase,
   FindAllProfessionalByUseCase,
+  FindAllByScheduledAtForSelectUseCase,
 ];
 
 @Module({

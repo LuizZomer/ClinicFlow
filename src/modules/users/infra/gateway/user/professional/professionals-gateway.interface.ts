@@ -4,4 +4,5 @@ import { FindAllByUseCaseDto } from 'src/modules/users/presentation/dto/input/pr
 export interface ProfessionalsGatewayInterface {
   findOneByWithAvailabilityHours(where: Partial<User>): Promise<User | null>;
   findAllBy(where: FindAllByUseCaseDto): Promise<User[]>;
+  findAllByScheduledAtForSelect(scheduledAt: Date): Promise<User[]>;
 }

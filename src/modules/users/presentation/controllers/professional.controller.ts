@@ -27,6 +27,8 @@ import { UpdateAvailabilityDto } from '../dto/input/professional/update-professi
 import { CreateProfessionalAvailiableUseCase } from '../../domains/use-cases/professional/create-professional-availiable.use-case';
 import { FindAllByUseCaseDto } from '../dto/input/professional/find-all-by.use-case';
 import { FindAllProfessionalByUseCase } from '../../domains/use-cases/professional/find-all-by.use-case';
+import { FindAllByScheduledAtForSelectUseCase } from '../../domains/use-cases/professional/find-all-by-scheduled-at-for-select.use-case';
+import { FindAllProfessionalForSelectDto } from '../dto/input/professional/find-all-professional-for-select.dto';
 
 @Controller('professional')
 export class ProfessionalController {
@@ -34,6 +36,7 @@ export class ProfessionalController {
     private readonly createProfessionalUseCase: CreateProfessionalUseCase,
     private readonly createProfessionalAvailiableUseCase: CreateProfessionalAvailiableUseCase,
     private readonly findAllProfessionalByUseCase: FindAllProfessionalByUseCase,
+    private readonly findAllByScheduledAtForSelectUseCase: FindAllByScheduledAtForSelectUseCase,
   ) {}
 
   @Post()
@@ -101,6 +104,31 @@ export class ProfessionalController {
   async findAllProfessional(@Query() query: FindAllByUseCaseDto) {
     const professionals =
       await this.findAllProfessionalByUseCase.execute(query);
+
+    return {
+      content: professionals,
+      status: HttpStatus.OK,
+    };
+  }
+
+  @Get('for-select')
+  @RolesAllowed(Roles.OPERATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get all professionals for select' })
+  // @ApiCreatedResponse({
+  //   description: 'Professional availability updated',
+  //   type: RegisterResponseDto,
+  // })
+  // @ApiBadRequestResponse({
+  //   description: 'User already exists',
+  //   type: GlobalErrorInterface,
+  // })
+  async findAllProfessionalForSelect(
+    @Query() { scheduledAt }: FindAllProfessionalForSelectDto,
+  ) {
+    const professionals =
+      await this.findAllByScheduledAtForSelectUseCase.execute(scheduledAt);
 
     return {
       content: professionals,

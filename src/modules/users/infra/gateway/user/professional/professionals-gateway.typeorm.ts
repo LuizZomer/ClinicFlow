@@ -73,4 +73,30 @@ export class ProfessionalsGatewayTypeorm
 
     return qb.getMany();
   }
+
+  async findAllByScheduledAtForSelect(scheduledAt: Date): Promise<User[]> {
+    const qb = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect(
+        'user.professionalAttributes',
+        'professionalAttributes',
+      )
+      .leftJoinAndSelect(
+        'professionalAttributes.professionalAvailiableHours',
+        'professionalAvailiableHours',
+      )
+      .leftJoin(
+        'user.appointmentsAsProfessional',
+        'appointments',
+        'appointments.scheduledAt = :scheduledAt AND appointments.statusId != :canceledStatus',
+        { scheduledAt, canceledStatus: 3 },
+      )
+      .where('user.role = :role', { role: Roles.PROFESSIONAL })
+      .andWhere('professionalAvailiableHours.scheduledAt = :scheduledAt', {
+        scheduledAt,
+      })
+      .andWhere('appointments.id IS NULL');
+
+    return qb.getMany();
+  }
 }
